@@ -13,8 +13,8 @@ function xhr(method, file, code) {
 }
 
 
+function listCore(db){
 
-function list(xhr) {
     let root = document.getElementById("root")
 
     if (root.firstChild) {
@@ -24,9 +24,7 @@ function list(xhr) {
     select.setAttribute("id", "listSelect")
     root.appendChild(select)
 
-    console.log(xhr.response)
-
-    let db = JSON.parse(xhr.response)
+ 
     //console.log(db)
 
     let keys = [" "]
@@ -121,7 +119,9 @@ function list(xhr) {
 }
 
 function main() {
-    xhr("GET", "json/users45.json", list)
+    //xhr("GET", "json/users45.json", list)
+    console.log(data[0].new1.sub1new1.hyperlink)
+    listCore(data)
 
 }
 
