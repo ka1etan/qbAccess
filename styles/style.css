@@ -1,0 +1,25 @@
+body {
+    background: #62a173;
+}
+
+.onText:hover{
+    color: #FFFFFF;
+}
+
+.decoration{
+    color: #dbdbd7;
+    text-decoration: none;
+}
+
+.decoration:hover{
+    color: #f5f57a;
+}
+
+.selects {
+    margin: 15px 0px 15px 0px;
+}
+
+.tableStyle table, td{
+    padding: 2px;
+    border: 1px solid #bac227;
+}

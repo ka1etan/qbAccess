@@ -12,6 +12,20 @@ function xhr(method, file, code) {
     xhr.send()
 }
 
+//https://techoverflow.net/2018/03/30/copying-strings-to-the-clipboard-using-pure-javascript/
+
+function copyStringToClipboard(str) {
+    
+    var el = document.createElement('textarea');
+    el.value = str;
+    // Set non-editable to avoid focus and move outside of view
+    el.setAttribute('readonly', '');
+    el.style = {position: 'absolute', left: '-9999px'};
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+}
 
 function listCore(db){
 
@@ -22,6 +36,7 @@ function listCore(db){
     }
     let select = document.createElement("select")
     select.setAttribute("id", "listSelect")
+    select.className="selects"
     root.appendChild(select)
 
  
@@ -49,12 +64,19 @@ function listCore(db){
     }
 
     function list2() {
-        if (root.childElementCount > 1) {
+        if (root.childElementCount == 2) {
             root.removeChild(document.getElementById("listSelect2"))
-            root.removeChild(document.getElementById("tableData"))
+           
+        } else if(root.childElementCount > 2)
+        {
+            root.removeChild(document.getElementById("listSelect2"))
+            root.removeChild(document.getElementById("tableDiv"))
+            
+            
         }
         let select2 = document.createElement("select")
         select2.setAttribute("id", "listSelect2")
+        select2.className="selects"
         root.appendChild(select2)
         let list1Value = document.getElementById("listSelect").value
         let a = null
@@ -86,27 +108,72 @@ function listCore(db){
 
         function display() {
             if (root.childElementCount > 2) {
-                root.removeChild(document.getElementById("tableData"))
+                root.removeChild(document.getElementById("tableDiv"))
             }
             let list2Value = document.getElementById("listSelect2").value
             let subContentIndex = subKeys.indexOf(list2Value) - 1
+            // let br = document.createElement('br')
+            // let br2 = document.createElement('br')
+            let tableDiv = document.createElement("div")
+            tableDiv.className = "tableStyle"
+            tableDiv.setAttribute("id", "tableDiv")
+            root.appendChild(tableDiv)
             let table = document.createElement('table')
             table.setAttribute("id", "tableData")
-            let br = document.createElement('br')
-            let br2 = document.createElement('br')
-            let br3 = document.createElement('br')
+            
+            //let br3 = document.createElement('br')
             //alert(JSON.stringify(subContent[subContentIndex]))
             let row = table.insertRow()
-            row.appendChild(br)
-            let hyperlink = document.createTextNode("hyperlink: " + (subContent[subContentIndex].hyperlink))
-            row.appendChild(hyperlink)
-            row.appendChild(br2)
-            let username = document.createTextNode("username: " + (subContent[subContentIndex].username))
-            row.appendChild(username)
-            row.appendChild(br3)
-            let password = document.createTextNode("password: " + (subContent[subContentIndex].password))
-            row.appendChild(password)
-            root.appendChild(table)
+            //row.appendChild(br)
+
+            let hyperDiv = document.createElement("div")
+            hyperDiv.setAttribute("id", "hyperlinkDiv")
+            hyperDiv.className = "onText"
+
+            let hyperCell = row.insertCell()
+            let hyperCellContent = row.insertCell()
+            hyperCellContent.appendChild(hyperDiv)
+            let hyperlink = document.createTextNode("hyperlink: ")
+            
+
+            hyperCell.appendChild(hyperlink)
+            //let hyperlinkContent = document.createTextNode(subContent[subContentIndex].hyperlink)
+            let hyperlinkContent = document.createElement("a")
+            hyperlinkContent.className = "decoration"
+            hyperlinkContent.setAttribute("href", subContent[subContentIndex].hyperlink)
+            hyperlinkContent.setAttribute("target", "_blank")
+            hyperlinkContent.innerText = subContent[subContentIndex].hyperlink
+            hyperDiv.appendChild(hyperlinkContent)
+            
+            let row2 = table.insertRow()
+            //row.appendChild(br2)
+            let userDiv = document.createElement("div")
+            userDiv.setAttribute("id", "userDiv")
+            userDiv.className = "onText"
+
+            let userCell = row2.insertCell()
+            let userCellContent = row2.insertCell()
+            userCellContent.appendChild(userDiv)
+            let username = document.createTextNode("username: " )
+            let usernameContent = document.createTextNode(subContent[subContentIndex].username)
+            userDiv.addEventListener("click", ()=>copyStringToClipboard(subContent[subContentIndex].username))
+            userCell.appendChild(username)
+            userDiv.appendChild(usernameContent)
+
+            let row3 = table.insertRow()
+            let passDiv = document.createElement("div")
+            passDiv.className = "onText"
+            
+            let passCell = row3.insertCell()
+            let passCellContect = row3.insertCell()
+            passCellContect.appendChild(passDiv)
+            let password = document.createTextNode("password: ")
+            let passwordContent = document.createTextNode(subContent[subContentIndex].password)
+            passDiv.addEventListener("click", ()=>copyStringToClipboard(subContent[subContentIndex].password))
+            passCell.appendChild(password)
+            passDiv.appendChild(passwordContent)
+
+            tableDiv.appendChild(table)
         }
 
         select2.addEventListener("change", () => display(), false)
